@@ -279,24 +279,23 @@ if __name__ == "__main__":
 ```
 === Hungarian Algorithm (Assignment Problem) ===
 Enter number of nodes in Group A (e.g., workers): 3
-Enter Group A Node 1 name: W1
-Enter Group A Node 2 name: W2
-Enter Group A Node 3 name: W3
+Enter Group A Node 1 name: A1
+Enter Group A Node 2 name: A2
+Enter Group A Node 3 name: A3
 Enter number of nodes in Group B (e.g., jobs): 3
-Enter Group B Node 1 name: J1
-Enter Group B Node 2 name: J2
-Enter Group B Node 3 name: J3
-
+Enter Group B Node 1 name: B1
+Enter Group B Node 2 name: B2
+Enter Group B Node 3 name: B3
 Enter the cost for each edge (from Group A to Group B):
-Cost from W1 -> J1: 9
-Cost from W1 -> J2: 2
-Cost from W1 -> J3: 7
-Cost from W2 -> J1: 6
-Cost from W2 -> J2: 4
-Cost from W2 -> J3: 3
-Cost from W3 -> J1: 5
-Cost from W3 -> J2: 8
-Cost from W3 -> J3: 1
+Cost from A1 -> B1: 4
+Cost from A1 -> B2: 2
+Cost from A1 -> B3: 5
+Cost from A2 -> B1: 3
+Cost from A2 -> B2: 7
+Cost from A2 -> B3: 6
+Cost from A3 -> B1: 8
+Cost from A3 -> B2: 1
+Cost from A3 -> B3: 9
 ```
 
 ---
@@ -305,14 +304,14 @@ Cost from W3 -> J3: 1
 
 ```
 Cost Matrix (Input):
-[[9. 2. 7.]
- [6. 4. 3.]
- [5. 8. 1.]]
+[[4. 2. 5.]
+ [3. 7. 6.]
+ [8. 1. 9.]]
 
 --- Output: Optimal Pairs ---
-W1 	 -> J2 	 (Cost: 2.0)
-W2 	 -> J3 	 (Cost: 3.0)
-W3 	 -> J1 	 (Cost: 5.0)
+A1 	 -> B3 	 (Cost: 5.0)
+A2 	 -> B1 	 (Cost: 3.0)
+A3 	 -> B2 	 (Cost: 1.0)
 
-Total Minimum Cost: 10.0
+Total Minimum Cost: 9.0
 ```
