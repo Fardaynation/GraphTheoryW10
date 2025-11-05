@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
 ---
 
-## How to Run
+## How to Use
 Enter these data in order:
    * Number of nodes
    * Node names
@@ -260,9 +260,9 @@ if __name__ == "__main__":
 
 ---
 
-### How to Run
+### How to Use
 
-3. Follow the prompts to enter:
+3. Enter as follow:
 
    * Number of nodes in **Group A (workers)**
    * Number of nodes in **Group B (jobs)**
