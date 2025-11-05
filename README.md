@@ -16,86 +16,118 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 def welsh_powell(nodes, edges):
-    graph = {v: [] for v in nodes}
-    for u, v, cost in edges:
+    graph = {}
+    for node in nodes:
+        graph[node] = []
+    
+    for u, v, _ in edges:  # don't need cost here
         graph[u].append(v)
-        graph[v].append(u)  # undirected graph
+        graph[v].append(u)
 
-    degrees = {v: len(adj) for v, adj in graph.items()}
-
-    sorted_vertices = sorted(degrees, key=degrees.get, reverse=True)
+    degrees = [(node, len(neighbors)) for node, neighbors in graph.items()]
+    degrees.sort(key=lambda x: x[1], reverse=True)
+    sorted_nodes = [node for node, _ in degrees]
 
     colors = {}
-    current_color = 1
+    color_num = 1
+    
+    for node in sorted_nodes:
+        if node in colors:
+            continue
 
-    for vertex in sorted_vertices:
-        if vertex not in colors:
-            colors[vertex] = current_color
-            for other in sorted_vertices:
-                if other not in colors:
-                    # check adjacency with all same-colored vertices
-                    if all((other not in graph[v]) for v, c in colors.items() if c == current_color):
-                        colors[other] = current_color
-            current_color += 1
+        colors[node] = color_num
 
+        for other_node in sorted_nodes:
+            if other_node in colors:
+                continue
+
+            can_use_color = True
+            for colored_node, col in colors.items():
+                if col == color_num and other_node in graph[colored_node]:
+                    can_use_color = False
+                    break
+            
+            if can_use_color:
+                colors[other_node] = color_num
+        
+        color_num += 1
+    
     return colors
 
 
-def visualize_coloring(nodes, edges, colors):
+def draw_graph(nodes, edges, colors):
     G = nx.Graph()
     G.add_nodes_from(nodes)
+
     for u, v, cost in edges:
         G.add_edge(u, v, weight=cost)
 
-    node_colors = [colors[n] for n in G.nodes()]
+    color_list = [colors[node] for node in G.nodes()]
 
-    if len(G.nodes) == 1:
-        pos = {list(G.nodes())[0]: (0, 0)}
+    if len(nodes) == 1:
+        pos = {nodes[0]: (0, 0)}
     else:
         pos = nx.spring_layout(G, seed=42)
+    
+    plt.figure(figsize=(8, 6))
 
-    plt.figure(figsize=(7, 5))
-    nx.draw(
-        G, pos, with_labels=True,
-        node_color=node_colors,
-        node_size=900,
-        cmap=plt.cm.Set3,
-        font_weight='bold',
-        edge_color="gray"
-    )
+    nx.draw(G, pos, 
+            with_labels=True,
+            node_color=color_list,
+            node_size=1000,
+            cmap=plt.cm.Set3,
+            font_size=12,
+            font_weight='bold',
+            edge_color='#888888',
+            width=2)
 
     if edges:
-        labels = nx.get_edge_attributes(G, 'weight')
-        nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
-
-    if not edges:
-        plt.text(0, -0.2, "(no edges in graph)", ha='center', fontsize=10, color='gray')
-
-    plt.title("Welsh–Powell Graph Coloring")
-    plt.axis("off")
+        edge_labels = nx.get_edge_attributes(G, 'weight')
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=10)
+    
+    plt.title("Graph Coloring using Welsh-Powell Algorithm", fontsize=14, pad=20)
+    plt.axis('off')
+    plt.tight_layout()
     plt.show()
 
 
 def main():
-    print("=== Welsh–Powell Graph Coloring ===")
-    n = int(input("Enter number of nodes: "))
-    nodes = [input(f"Enter node {i+1} name: ").strip() for i in range(n)]
+    print("=" * 50)
+    print("Welsh-Powell Graph Coloring Algorithm")
+    print("=" * 50)
 
-    m = int(input("Enter number of edges: "))
+    n = int(input("\nHow many nodes? "))
+    nodes = []
+    for i in range(n):
+        node_name = input(f"Node {i+1}: ").strip()
+        nodes.append(node_name)
+
+    m = int(input(f"\nHow many edges? "))
     edges = []
+    print("(Enter the two nodes and the edge weight/cost)")
     for i in range(m):
-        u = input(f"Edge {i+1} - from node: ").strip()
-        v = input(f"Edge {i+1} - to node: ").strip()
-        cost = float(input(f"Edge {i+1} - cost: "))
+        print(f"\nEdge {i+1}:")
+        u = input("  From: ").strip()
+        v = input("  To: ").strip()
+        cost = float(input("  Weight: "))
         edges.append((u, v, cost))
 
+    print("\n" + "=" * 50)
+    print("Running Welsh-Powell algorithm...")
+    print("=" * 50)
+    
     colors = welsh_powell(nodes, edges)
 
-    print("\nNode Color Assignments:")
+    print("\nColoring Results:")
+    print("-" * 30)
     for node in nodes:
-        print(f"{node} → Color {colors[node]}")
+        print(f"  {node:<10} -> Color {colors[node]}")
+    
+    num_colors = len(set(colors.values()))
+    print(f"\nTotal colors used: {num_colors}")
+    print("=" * 50)
 
-    visualize_coloring(nodes, edges, colors)
+    draw_graph(nodes, edges, colors)
 
 
 if __name__ == "__main__":
@@ -105,11 +137,11 @@ if __name__ == "__main__":
 ---
 
 ## How to Use
-Enter these data in order:
-   * Number of nodes
-   * Node names
-   * Number of edges
-   * Edge connections and weights (costs)
+Enter within the following order:
+- Number of nodes
+- Names for each nodes
+- Number of edges
+- Connection of edges with vertices (with weight)
 
 ---
 
@@ -118,32 +150,45 @@ Enter these data in order:
 ### Input
 
 ```
-=== Welsh–Powell Graph Coloring ===
-Enter number of nodes: 5
-Enter node 1 name: A
-Enter node 2 name: B
-Enter node 3 name: C
-Enter node 4 name: D
-Enter node 5 name: E
-Enter number of edges: 6
-Edge 1 - from node: A
-Edge 1 - to node: B
-Edge 1 - cost: 1
-Edge 2 - from node: A
-Edge 2 - to node: C
-Edge 2 - cost: 1
-Edge 3 - from node: B
-Edge 3 - to node: D
-Edge 3 - cost: 1
-Edge 4 - from node: B
-Edge 4 - to node: E
-Edge 4 - cost: 1
-Edge 5 - from node: C
-Edge 5 - to node: D
-Edge 5 - cost: 1
-Edge 6 - from node: D
-Edge 6 - to node: E
-Edge 6 - cost: 1
+How many nodes? 5
+Node 1: A
+Node 2: B
+Node 3: C
+Node 4: D
+Node 5: E
+
+How many edges? 6
+(Enter the two nodes and the edge weight/cost)
+
+Edge 1:
+  From: A
+  To: B
+  Weight: 1
+
+Edge 2:
+  From: A
+  To: C
+  Weight: 2
+
+Edge 3:
+  From: B
+  To: C
+  Weight: 3
+
+Edge 4:
+  From: B
+  To: D
+  Weight: 4
+
+Edge 5:
+  From: C
+  To: D
+  Weight: 5
+
+Edge 6:
+  From: D
+  To: E
+  Weight: 6
 ```
 
 ---
@@ -151,12 +196,20 @@ Edge 6 - cost: 1
 ### Output
 
 ```
-Node Color Assignments:
-A → Color 1
-B → Color 2
-C → Color 2
-D → Color 1
-E → Color 3
+==================================================
+Running Welsh-Powell algorithm...
+==================================================
+
+Coloring Results:
+------------------------------
+  A          -> Color 1
+  B          -> Color 2
+  C          -> Color 3
+  D          -> Color 1
+  E          -> Color 2
+
+Total colors used: 3
+==================================================
 ```
 ---
 
