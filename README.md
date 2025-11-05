@@ -1,14 +1,12 @@
-# GraphTheoryW10
+# Graph Theory W10
 
-Group 1 
+Group 1
+| Name           | NRP        |
+| ---            | ---        |
+| Alif Muflih Jauhary | 5025241003 |
+| Makna Alam Pratama | 5025241077 |
+| Rayen Yeriel Mangiwa | 5025241262 |
 
-Members:
--	Alif Muflih Jauhary (5025241003)
--	Rayen Yeriel Mangiwa (5025241262)
--	Makna Alam Pratama (5025241077)
-
-## Welsh-Powell Algorithm
-```
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -102,4 +100,60 @@ def main():
 
 if __name__ == "__main__":
     main()
-```python
+
+---
+
+## How to Run
+Enter these nodes in order:
+   * Number of nodes
+   * Node names
+   * Number of edges
+   * Edge connections and weights (costs)
+
+---
+
+## Sample Test Case
+
+### Input
+
+```
+=== Welsh–Powell Graph Coloring ===
+Enter number of nodes: 5
+Enter node 1 name: A
+Enter node 2 name: B
+Enter node 3 name: C
+Enter node 4 name: D
+Enter node 5 name: E
+Enter number of edges: 6
+Edge 1 - from node: A
+Edge 1 - to node: B
+Edge 1 - cost: 1
+Edge 2 - from node: A
+Edge 2 - to node: C
+Edge 2 - cost: 1
+Edge 3 - from node: B
+Edge 3 - to node: D
+Edge 3 - cost: 1
+Edge 4 - from node: B
+Edge 4 - to node: E
+Edge 4 - cost: 1
+Edge 5 - from node: C
+Edge 5 - to node: D
+Edge 5 - cost: 1
+Edge 6 - from node: D
+Edge 6 - to node: E
+Edge 6 - cost: 1
+```
+
+---
+
+### Output
+
+```
+Node Color Assignments:
+A → Color 1
+B → Color 2
+C → Color 2
+D → Color 1
+E → Color 3
+```
