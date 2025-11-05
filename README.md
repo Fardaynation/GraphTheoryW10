@@ -20,7 +20,7 @@ def welsh_powell(nodes, edges):
     for node in nodes:
         graph[node] = []
     
-    for u, v, _ in edges:  # don't need cost here
+    for u, v, _ in edges:
         graph[u].append(v)
         graph[v].append(u)
 
