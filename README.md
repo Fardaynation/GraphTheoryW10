@@ -115,7 +115,7 @@ if __name__ == "__main__":
 ---
 
 ## How to Run
-Enter these nodes in order:
+Enter these data in order:
    * Number of nodes
    * Node names
    * Number of edges
