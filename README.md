@@ -168,14 +168,12 @@ import matplotlib.pyplot as plt
 
 
 def hungarian_algorithm(cost_matrix):
-    """Solve the assignment problem using the Hungarian algorithm."""
     row_ind, col_ind = linear_sum_assignment(cost_matrix)
     total_cost = cost_matrix[row_ind, col_ind].sum()
     return row_ind, col_ind, total_cost
 
 
 def visualize_assignment(cost_matrix, row_ind, col_ind, workers, jobs):
-    """Visualize the optimal worker-job assignment using NetworkX."""
     G = nx.Graph()
     G.add_nodes_from(workers, bipartite=0)
     G.add_nodes_from(jobs, bipartite=1)
@@ -217,7 +215,7 @@ def visualize_assignment(cost_matrix, row_ind, col_ind, workers, jobs):
 
 
 def main():
-    print("=== Hungarian Algorithm (Assignment Problem) ===")
+    print("=== Hungarian Algorithm ===")
 
     try:
         n_workers = int(input("Enter number of nodes in Group A (e.g., workers): "))
