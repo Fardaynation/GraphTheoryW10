@@ -7,6 +7,9 @@ Group 1
 | Makna Alam Pratama | 5025241077 |
 | Rayen Yeriel Mangiwa | 5025241262 |
 
+---
+
+```python
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -48,6 +51,7 @@ def visualize_coloring(nodes, edges, colors):
 
     # Prepare color map
     node_colors = [colors[n] for n in G.nodes()]
+
     # --- Fix: handle single-node or edgeless graphs ---
     if len(G.nodes) == 1:
         pos = {list(G.nodes())[0]: (0, 0)}
@@ -56,8 +60,14 @@ def visualize_coloring(nodes, edges, colors):
 
     # Draw nodes and edges
     plt.figure(figsize=(7, 5))
-    nx.draw(G, pos, with_labels=True, node_color=node_colors,
-            node_size=900, cmap=plt.cm.Set3, font_weight='bold', edge_color="gray")
+    nx.draw(
+        G, pos, with_labels=True,
+        node_color=node_colors,
+        node_size=900,
+        cmap=plt.cm.Set3,
+        font_weight='bold',
+        edge_color="gray"
+    )
 
     # Draw edge weights (if any)
     if edges:
@@ -100,6 +110,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
 
 ---
 
