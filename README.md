@@ -9,6 +9,8 @@ Group 1
 
 ---
 
+## Welsh-Powell Algorithm
+
 ```python
 import networkx as nx
 import matplotlib.pyplot as plt
