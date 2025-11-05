@@ -14,19 +14,15 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 def welsh_powell(nodes, edges):
-    # --- Build adjacency list ---
     graph = {v: [] for v in nodes}
     for u, v, cost in edges:
         graph[u].append(v)
         graph[v].append(u)  # undirected graph
 
-    # --- Step 1: Compute degrees ---
     degrees = {v: len(adj) for v, adj in graph.items()}
 
-    # --- Step 2: Sort by descending degree ---
     sorted_vertices = sorted(degrees, key=degrees.get, reverse=True)
 
-    # --- Step 3–5: Welsh–Powell Coloring ---
     colors = {}
     current_color = 1
 
@@ -45,20 +41,17 @@ def welsh_powell(nodes, edges):
 
 def visualize_coloring(nodes, edges, colors):
     G = nx.Graph()
-    G.add_nodes_from(nodes)  # ✅ Make sure single nodes appear even if no edges
+    G.add_nodes_from(nodes)
     for u, v, cost in edges:
         G.add_edge(u, v, weight=cost)
 
-    # Prepare color map
     node_colors = [colors[n] for n in G.nodes()]
 
-    # --- Fix: handle single-node or edgeless graphs ---
     if len(G.nodes) == 1:
         pos = {list(G.nodes())[0]: (0, 0)}
     else:
         pos = nx.spring_layout(G, seed=42)
 
-    # Draw nodes and edges
     plt.figure(figsize=(7, 5))
     nx.draw(
         G, pos, with_labels=True,
@@ -69,12 +62,10 @@ def visualize_coloring(nodes, edges, colors):
         edge_color="gray"
     )
 
-    # Draw edge weights (if any)
     if edges:
         labels = nx.get_edge_attributes(G, 'weight')
         nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
 
-    # If no edges, show a message in the plot
     if not edges:
         plt.text(0, -0.2, "(no edges in graph)", ha='center', fontsize=10, color='gray')
 
@@ -96,15 +87,12 @@ def main():
         cost = float(input(f"Edge {i+1} - cost: "))
         edges.append((u, v, cost))
 
-    # Run algorithm
     colors = welsh_powell(nodes, edges)
 
-    # Output result
     print("\nNode Color Assignments:")
     for node in nodes:
         print(f"{node} → Color {colors[node]}")
 
-    # Visualization
     visualize_coloring(nodes, edges, colors)
 
 
@@ -192,31 +180,26 @@ def visualize_assignment(cost_matrix, row_ind, col_ind, workers, jobs):
     G.add_nodes_from(workers, bipartite=0)
     G.add_nodes_from(jobs, bipartite=1)
 
-    # Add all edges with weights
     all_edges = []
     for i, worker in enumerate(workers):
         for j, job in enumerate(jobs):
             all_edges.append((worker, job, {'weight': cost_matrix[i, j]}))
     G.add_edges_from(all_edges)
 
-    # Positioning for bipartite graph layout
     pos = {}
     pos.update((node, (1, -i)) for i, node in enumerate(workers))
     pos.update((node, (2, -i)) for i, node in enumerate(jobs))
 
     plt.figure(figsize=(8, 6))
 
-    # Draw all edges and nodes
     nx.draw_networkx_nodes(G, pos, nodelist=workers, node_color='skyblue', node_size=1000)
     nx.draw_networkx_nodes(G, pos, nodelist=jobs, node_color='lightgreen', node_size=1000)
     nx.draw_networkx_labels(G, pos, font_size=12, font_weight='bold')
     nx.draw_networkx_edges(G, pos, edgelist=all_edges, width=0.5, alpha=0.5, edge_color='gray')
 
-    # Display edge weights (costs)
     edge_labels = nx.get_edge_attributes(G, 'weight')
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='gray', font_size=8)
 
-    # Highlight optimal edges (red)
     optimal_edges = []
     optimal_edge_labels = {}
     for i, j in zip(row_ind, col_ind):
