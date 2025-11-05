@@ -170,7 +170,7 @@ E → Color 3
 ```
 ---
 
-## Hungarian Algorithm (Assignment Problem)
+## Hungarian Algorithm
 
 ```python
 import numpy as np
